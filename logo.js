@@ -23,7 +23,7 @@ function configureLogoLink() {
   if (allowed) {
     // Create anchor around logo
     const link = document.createElement("a");
-    link.href = "index.html";
+    link.href = "Homepage.html";
     link.title = "Go to homepage";
     const logo = container.querySelector(".logo");
     container.replaceChild(link, logo);
