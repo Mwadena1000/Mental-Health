@@ -6,14 +6,33 @@ body {
 }
 
 header {
-  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
+  font-size: 1.5rem;
   font-weight: bold;
   color: #007BFF;
+}
+
+.nav-links a {
+  margin-left: 1.5rem;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #007BFF;
+}
+
+.nav-links .crisis {
+  color: #e63946;
+  font-weight: bold;
 }
 
 .quiz-container {
