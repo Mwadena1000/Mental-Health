@@ -117,3 +117,39 @@ footer {
   background: #007BFF;
   color: #fff;
 }
+.support-contacts {
+  background: #ffe9e9;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.support-contacts h2 {
+  color: #e63946;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.support-contacts ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.support-contacts li {
+  margin: 0.5rem 0;
+}
+
+.support-contacts a {
+  color: #e63946;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.support-contacts a:hover {
+  text-decoration: underline;
+}
