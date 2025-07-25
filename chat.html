@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anonymous Chat | DMHSP Kenya</title>
+  <link rel="stylesheet" href="chat.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">DMHSP Kenya</div>
+  </header>
+
+  <main class="chat-container">
+    <h1>Anonymous Chat Support</h1>
+    <div id="chat-box" class="chat-box"></div>
+    <form id="chat-form" class="chat-form">
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Type your message..."
+        required
+      />
+      <button type="submit">Send</button>
+    </form>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> DMHSP Kenya.
+  </footer>
+
+  <script src="chat.js"></script>
+</body>
+</html>
