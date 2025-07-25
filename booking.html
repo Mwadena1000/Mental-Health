@@ -13,7 +13,7 @@
 
   <main class="booking-container">
     <h1>Book an Appointment</h1>
-    <form id="bookingForm">
+    <form id="bookingForm" novalidate>
       <label for="name">Full Name</label>
       <input type="text" id="name" required />
 
@@ -27,7 +27,7 @@
       <input type="time" id="time" required />
 
       <label for="message">Additional Notes (optional)</label>
-      <textarea id="message" rows="4" placeholder="If urgent, type emergency, crisis, or suicide..."></textarea>
+      <textarea id="message" rows="4" placeholder="If urgent, include 'emergency', 'crisis', or 'suicide'"></textarea>
 
       <button type="submit" class="submit-btn">Book Now</button>
     </form>

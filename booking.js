@@ -1,77 +1,71 @@
 // Footer year
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// Format date as YYYY-MM-DD
-function formatDateISO(date) {
-  const y = date.getFullYear();
-  const m = String(date.getMonth()+1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
+function formatDateISO(d) {
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2, '0'), dd = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${dd}`;
 }
 
 const dateInput = document.getElementById("date");
+const timeInput = document.getElementById("time");
 const messageInput = document.getElementById("message");
 
-// Set initial min
-dateInput.min = formatDateISO(new Date());
-dateInput.value = formatDateISO(new Date());
+// Set date min to today
+const today = new Date();
+dateInput.min = formatDateISO(today);
+dateInput.value = formatDateISO(today);
 
-// Helper: detect crisis keywords in message
-function isCrisis(text) {
-  if (!text) return false;
-  const lower = text.toLowerCase();
-  return ['emergency','crisis','suicide'].some(w => lower.includes(w));
+// Set default time window to 09:00–17:00
+timeInput.min = "09:00";
+timeInput.max = "17:00";
+
+// Check for crisis in notes
+function isCrisis(txt) {
+  return txt && ['emergency','crisis','suicide'].some(w => txt.toLowerCase().includes(w));
 }
 
-// Disable weekends on input unless crisis allowed
-dateInput.addEventListener("input", function(e) {
-  const selected = new Date(this.value);
-  const day = selected.getDay(); // 0=Sunday,6=Saturday
-  const allowWeekend = isCrisis(messageInput.value);
-
-  if ([0,6].includes(day) && !allowWeekend) {
-    this.value = '';
-    this.setCustomValidity("Weekends not allowed unless marked as crisis.");
-    this.reportValidity();
+// Validate date selection: weekend not allowed unless crisis
+dateInput.addEventListener("input", () => {
+  const sel = new Date(dateInput.value);
+  const isWeekend = [0,6].includes(sel.getDay());
+  if (isWeekend && !isCrisis(messageInput.value)) {
+    dateInput.setCustomValidity("Weekends not allowed unless marked as crisis.");
   } else {
-    this.setCustomValidity("");
+    dateInput.setCustomValidity("");
   }
 });
 
-// Re-validate whenever note changes
-messageInput.addEventListener("input", function() {
-  if (dateInput.value) {
-    const selected = new Date(dateInput.value);
-    const day = selected.getDay();
-    const allow = isCrisis(this.value);
-    if ([0,6].includes(day) && !allow) {
-      dateInput.setCustomValidity("Weekends not allowed unless marked as crisis.");
-    } else {
-      dateInput.setCustomValidity("");
-    }
+// Validate time: outside hours only if crisis
+timeInput.addEventListener("input", () => {
+  const t = timeInput.value;
+  if (t && (t < timeInput.min || t > timeInput.max) && !isCrisis(messageInput.value)) {
+    timeInput.setCustomValidity("Time must be within 09:00–17:00 unless marked as crisis.");
+  } else {
+    timeInput.setCustomValidity("");
   }
+});
+
+// Re-validate on message change
+messageInput.addEventListener("input", () => {
+  dateInput.dispatchEvent(new Event("input"));
+  timeInput.dispatchEvent(new Event("input"));
 });
 
 // Submit handler
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
   e.preventDefault();
+  if (!this.checkValidity()) {
+    this.reportValidity();
+    return;
+  }
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
   const date = dateInput.value;
-  const time = document.getElementById("time").value;
-  const msg = messageInput.value.trim();
-
-  // Final weekend check
-  const day = new Date(date).getDay();
-  if ([0,6].includes(day) && !isCrisis(msg)) {
-    alert("Weekend booking only allowed if note contains emergency, crisis, or suicide.");
-    return;
-  }
+  const time = timeInput.value;
 
   document.getElementById("confirmation").textContent =
     `Thank you, ${name}! Your appointment on ${date} at ${time} has been received. We'll contact you at ${email}.`;
 
   this.reset();
   dateInput.min = formatDateISO(new Date());
-  dateInput.value = formatDateISO(new Date());
 });
