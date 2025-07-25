@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Appointment | DMHSP Kenya</title>
+  <link rel="stylesheet" href="booking.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">DMHSP Kenya</div>
+  </header>
+
+  <main class="booking-container">
+    <h1>Book an Appointment</h1>
+    <form id="bookingForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required />
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" required />
+
+      <label for="date">Preferred Date</label>
+      <input type="date" id="date" required />
+
+      <label for="time">Preferred Time</label>
+      <input type="time" id="time" required />
+
+      <label for="message">Additional Notes (optional)</label>
+      <textarea id="message" rows="4"></textarea>
+
+      <button type="submit" class="submit-btn">Book Now</button>
+    </form>
+
+    <div id="confirmation" class="confirmation"></div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> DMHSP Kenya.
+  </footer>
+
+  <script src="booking.js"></script>
+</body>
+</html>
