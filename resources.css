@@ -16,6 +16,25 @@ header {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+a {
+  text-decoration: none;
+}
+
+.nav-links a {
+  margin-left: 1.5rem;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.nav-links .crisis {
+  color: #e63946;
+  font-weight: bold;
+}
+
+.nav-links a:hover {
+  color: #007BFF;
+}
+
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
