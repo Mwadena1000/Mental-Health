@@ -1,3 +1,7 @@
+if (!localStorage.getItem('authToken')) {
+  window.location.href = `login.html?returnUrl=booking.html`;
+}
+
 // Footer year
 document.getElementById("year").textContent = new Date().getFullYear();
 
