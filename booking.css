@@ -1,3 +1,4 @@
+/* Base & Body */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -54,6 +55,7 @@ a {
   font-weight: bold;
 }
 
+/* Booking container & form */
 .booking-container {
   max-width: 600px;
   margin: 2rem auto;
@@ -114,4 +116,9 @@ footer {
   padding: 1rem;
   font-size: 0.85rem;
   color: #555;
+}
+
+/* Utility for logo container */
+.logo-container {
+  cursor: pointer;
 }

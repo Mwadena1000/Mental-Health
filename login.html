@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Log In | MHK Kenya</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9fcff; color: #333; }
+    form { max-width: 400px; margin: auto; padding: 1rem; background: #fff; border-radius: 8px; }
+    h1 { text-align: center; color: #007BFF; }
+    label { display: block; margin: 1rem 0 0.5rem; font-weight: bold; }
+    input { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { width: 100%; padding: 0.75rem; background: #007BFF; color: white; border: none; border-radius: 25px; font-size: 1rem; }
+    button:hover { background: #0056b3; }
+    .error { color: red; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Log In</h1>
+  <form id="loginForm" autocomplete="on" novalidate>
+    <label for="email">Email address (required)</label>
+    <input type="email" id="email" name="email" autocomplete="username" required />
+    <div id="emailError" class="error" aria-live="polite"></div>
+
+    <label for="password">Password (required)</label>
+    <input type="password" id="password" name="password" autocomplete="current-password" required />
+    <div id="passwordError" class="error" aria-live="polite"></div>
+
+    <button type="submit">Log In</button>
+  </form>
+
+  <p style="text-align:center; margin-top:1rem;">
+    Don't have an account? <a href="signup.html">Sign Up</a>
+  </p>
+
+  <script>
+    // Only allow redirects to trusted internal pages
+    function isSafeUrl(url) {
+      return url && (url === 'booking.html' || url === 'Homepage.html' || url.startsWith('/'));
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get('returnUrl') || 'Homepage.html';
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = this.email.value.trim();
+      const pwd = this.password.value;
+      let ok = true;
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('passwordError').textContent = '';
+
+      if (!email) {
+        document.getElementById('emailError').textContent = 'Email is required.';
+        ok = false;
+      }
+      if (!pwd) {
+        document.getElementById('passwordError').textContent = 'Password is required.';
+        ok = false;
+      }
+      if (!ok) return;
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pwd })
+        });
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+          // Redirect to returnUrl if it's safe, else default booking page
+          const dest = isSafeUrl(returnUrl) ? returnUrl : 'booking.html';
+          window.location.href = dest;
+        } else {
+          alert(data.message || 'Login failed');
+        }
+      } catch (err) {
+        alert('Login error');
+      }
+    });
+  </script>
+</body>
+</html>

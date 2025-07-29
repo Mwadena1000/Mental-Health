@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up | MHK Kenya</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; background: #f9fcff; color: #333; }
+    form { max-width: 400px; margin: auto; padding: 1rem; background: #fff; border-radius: 8px; }
+    h1 { text-align: center; color: #007BFF; }
+    label { display: block; margin: 1rem 0 0.5rem; font-weight: bold; }
+    input { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { width: 100%; padding: 0.75rem; background: #007BFF; color: white; border: none; border-radius: 25px; font-size: 1rem; }
+    button:hover { background: #0056b3; }
+    .error { color: red; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Create an Account</h1>
+  <form id="signupForm" autocomplete="on" novalidate>
+    <label for="email">Email address (required)</label>
+    <input type="email" id="email" name="email" autocomplete="email" required />
+    <div id="emailError" class="error" aria-live="polite"></div>
+
+    <label for="password">Password (required): at least 8 characters</label>
+    <input type="password" id="password" name="password" autocomplete="new-password" minlength="8" required />
+    <div id="passwordError" class="error" aria-live="polite"></div>
+
+    <label for="confirm">Confirm Password</label>
+    <input type="password" id="confirm" name="confirm" autocomplete="new-password" minlength="8" required />
+    <div id="confirmError" class="error" aria-live="polite"></div>
+
+    <input type="hidden" id="returnUrl" name="returnUrl" value=""/>
+
+    <button type="submit">Sign Up</button>
+  </form>
+
+  <p style="text-align:center; margin-top:1rem;">
+    Already have an account? <a href="login.html">Log in</a>
+  </p>
+
+  <script>
+    function isSafeUrl(url) {
+      return url && (url === 'booking.html' || url.startsWith('/') || url === 'Homepage.html');
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const returnUrl = params.get('returnUrl') || 'Homepage.html';
+    document.getElementById('returnUrl').value = returnUrl;
+
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = this.email.value.trim();
+      const pwd = this.password.value;
+      const conf = this.confirm.value;
+      const rv = this.returnUrl.value;
+      let ok = true;
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('passwordError').textContent = '';
+      document.getElementById('confirmError').textContent = '';
+
+      if (!email) {
+        document.getElementById('emailError').textContent = 'Email is required.';
+        ok = false;
+      }
+      if (pwd.length < 8) {
+        document.getElementById('passwordError').textContent = 'Password must be at least 8 characters.';
+        ok = false;
+      }
+      if (pwd !== conf) {
+        document.getElementById('confirmError').textContent = 'Passwords do not match.';
+        ok = false;
+      }
+      if (!ok) return;
+
+      try {
+        const res = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pwd })
+        });
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+          if (isSafeUrl(rv)) {
+            window.location.href = rv;
+          } else {
+            window.location.href = 'booking.html';
+          }
+        } else {
+          alert(data.message || 'Signup failed');
+        }
+      } catch(err) {
+        alert('Signup error');
+      }
+    });
+  </script>
+</body>
+</html>

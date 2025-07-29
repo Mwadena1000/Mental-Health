@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Self-Assessment Quiz | DMHSP Kenya</title>
-  <link rel="stylesheet" href="quiz.css" />
+  <link rel="stylesheet" href="quiz.css"/>
 </head>
 <body>
   <header class="navbar">
     <div id="logo-container" class="logo-container">
-    <div class="logo">MHK</div>
+      <div class="logo">MHK</div>
     </div>   
     <nav class="nav-links">
+      <a href="Homepage.html">Home</a>
       <a href="quiz.html">Self-Assessment</a>
       <a href="chat.html">Chat Support</a>
       <a href="resources.html">Resources</a>
@@ -20,9 +21,8 @@
     </nav>
   </header>
 
-
   <main class="quiz-container">
-    <h1>Stress Self-Assessment</h1>
+    <h1>Stress Self‑Assessment</h1>
     <form id="quizForm">
       <div class="question">
         <p>1. I feel overwhelmed with my responsibilities.</p>
@@ -49,6 +49,9 @@
     </form>
 
     <div id="result" class="result"></div>
+
+    <!-- New Save Results Button -->
+    <button id="saveResults" class="save-btn">Save My Results</button>
   </main>
 
   <footer>
@@ -57,6 +60,5 @@
 
   <script src="quiz.js"></script>
   <script src="logo.js"></script>
-
 </body>
 </html>

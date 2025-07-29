@@ -1,3 +1,6 @@
+/* ========================= */
+/* Base & Global Styles      */
+/* ========================= */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -16,7 +19,6 @@ header {
 
 a {
   text-decoration: none;
-}
 
 .nav-links a {
   margin-left: 1.5rem;
@@ -37,30 +39,19 @@ a {
   font-size: 1.5rem;
   font-weight: bold;
   color: #007BFF;
+  cursor: pointer;
 }
 
-.nav-links a {
-  margin-left: 1.5rem;
-  color: #333;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover {
-  color: #007BFF;
-}
-
-.nav-links .crisis {
-  color: #e63946;
-  font-weight: bold;
-}
-
+/* ========================= */
+/* Quiz Container & Layout   */
+/* ========================= */
 .quiz-container {
   max-width: 600px;
   margin: 2rem auto;
   background: #fff;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 h1 {
@@ -72,7 +63,6 @@ h1 {
 .question {
   margin-bottom: 1.5rem;
 }
-
 .question p {
   margin-bottom: 0.5rem;
   font-weight: bold;
@@ -81,8 +71,12 @@ h1 {
 label {
   display: block;
   margin: 0.25rem 0;
+  cursor: pointer;
 }
 
+/* ========================= */
+/* Submit Button & Result    */
+/* ========================= */
 .submit-btn {
   display: block;
   margin: 2rem auto 0;
@@ -93,8 +87,8 @@ label {
   border-radius: 25px;
   cursor: pointer;
   font-size: 1rem;
+  text-decoration: none;
 }
-
 .submit-btn:hover {
   background: #0056b3;
 }
@@ -106,6 +100,28 @@ label {
   font-size: 1.2rem;
 }
 
+/* ========================= */
+/* Save Results Button       */
+/* ========================= */
+.save-btn {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.75rem 2rem;
+  background: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+}
+.save-btn:hover {
+  background: #218838;
+}
+
+/* ========================= */
+/* Footer Styles             */
+/* ========================= */
 footer {
   text-align: center;
   padding: 1rem;

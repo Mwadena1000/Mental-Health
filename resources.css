@@ -1,3 +1,4 @@
+/* ========== Base & Global Styles ========== */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -5,6 +6,7 @@ body {
   color: #333;
 }
 
+/* ========== Header & Navigation ========== */
 header {
   display: flex;
   justify-content: space-between;
@@ -37,11 +39,13 @@ a {
   font-size: 1.5rem;
   font-weight: bold;
   color: #007BFF;
+  cursor: pointer;
 }
 
 .nav-links a {
   margin-left: 1.5rem;
   color: #333;
+  text-decoration: none;
   transition: color 0.3s;
 }
 
@@ -54,6 +58,7 @@ a {
   font-weight: bold;
 }
 
+/* ========== Resource Hub Layout ========== */
 .resources-container {
   max-width: 1000px;
   margin: 2rem auto;
@@ -70,6 +75,7 @@ p {
   margin-bottom: 2rem;
 }
 
+/* ========== Resource Cards Grid ========== */
 .resource-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -101,11 +107,11 @@ p {
   text-decoration: none;
   transition: background 0.3s;
 }
-
 .resource-card a:hover {
   background: #0056b3;
 }
 
+/* ========== Footer ========== */
 footer {
   text-align: center;
   padding: 1rem;
