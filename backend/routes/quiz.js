@@ -1,21 +1,13 @@
 const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
-const QuizResult = require('../models/QuizResult');
+const { saveQuiz, getUserResults } = require('../controllers/quizController');
 
 const router = express.Router();
 
-router.post('/save', authMiddleware, async (req, res) => {
-  const { q1, q2, q3, total } = req.body;
-  try {
-    await QuizResult.create({
-      userId: req.user._id,
-      q1, q2, q3, total
-    });
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Failed to save quiz result' });
-  }
-});
+// Save quiz result (authenticated)
+router.post('/save', authMiddleware, saveQuiz);
+
+// Retrieve the user's past quiz results
+router.get('/my-results', authMiddleware, getUserResults);
 
 module.exports = router;
