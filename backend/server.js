@@ -11,7 +11,12 @@ const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.DB_URL /*, optional config object */)
+mongoose.connect(process.env.DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+})
   .then(() => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
