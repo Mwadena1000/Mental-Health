@@ -18,20 +18,19 @@
 <body>
   <h1>Create an Account</h1>
   <form id="signupForm" autocomplete="on" novalidate>
-    <label for="email">Email address (required)</label>
-    <input type="email" id="email" name="email" autocomplete="email" required />
+    <label>Email address (required)</label>
+    <input type="email" id="email" name="email" required />
     <div id="emailError" class="error" aria-live="polite"></div>
 
-    <label for="password">Password (required): at least 8 characters</label>
-    <input type="password" id="password" name="password" autocomplete="new-password" minlength="8" required />
+    <label>Password (min 8 characters)</label>
+    <input type="password" id="password" name="password" minlength="8" required />
     <div id="passwordError" class="error" aria-live="polite"></div>
 
-    <label for="confirm">Confirm Password</label>
-    <input type="password" id="confirm" name="confirm" autocomplete="new-password" minlength="8" required />
+    <label>Confirm Password</label>
+    <input type="password" id="confirm" name="confirm" minlength="8" required />
     <div id="confirmError" class="error" aria-live="polite"></div>
 
-    <input type="hidden" id="returnUrl" name="returnUrl" value=""/>
-
+    <input type="hidden" id="returnUrl" name="returnUrl" value="" />
     <button type="submit">Sign Up</button>
   </form>
 
@@ -41,7 +40,7 @@
 
   <script>
     function isSafeUrl(url) {
-      return url && (url === 'booking.html' || url.startsWith('/') || url === 'Homepage.html');
+      return url === 'booking.html' || url === 'Homepage.html' || url.startsWith('/');
     }
 
     const params = new URLSearchParams(window.location.search);
@@ -59,38 +58,30 @@
       document.getElementById('passwordError').textContent = '';
       document.getElementById('confirmError').textContent = '';
 
-      if (!email) {
-        document.getElementById('emailError').textContent = 'Email is required.';
-        ok = false;
-      }
-      if (pwd.length < 8) {
-        document.getElementById('passwordError').textContent = 'Password must be at least 8 characters.';
-        ok = false;
-      }
-      if (pwd !== conf) {
-        document.getElementById('confirmError').textContent = 'Passwords do not match.';
-        ok = false;
-      }
+      if (!email) { document.getElementById('emailError').textContent = 'Email is required.'; ok = false; }
+      if (pwd.length < 8) { document.getElementById('passwordError').textContent = 'Password must be at least 8 characters.'; ok = false; }
+      if (pwd !== conf) { document.getElementById('confirmError').textContent = 'Passwords do not match.'; ok = false; }
       if (!ok) return;
 
       try {
-        const res = await fetch('/api/signup', {
+        const res = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password: pwd })
         });
         const data = await res.json();
+        console.log('Signup response:', data);
+
         if (data.token) {
           localStorage.setItem('authToken', data.token);
-          if (isSafeUrl(rv)) {
-            window.location.href = rv;
-          } else {
-            window.location.href = 'booking.html';
-          }
+          window.location.href = isSafeUrl(rv) ? rv : 'booking.html';
+        } else if (data.success) {
+          // fallback if you return success without token
+          window.location.href = 'login.html?returnUrl=' + encodeURIComponent(rv);
         } else {
           alert(data.message || 'Signup failed');
         }
-      } catch(err) {
+      } catch (err) {
         alert('Signup error');
       }
     });
