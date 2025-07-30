@@ -15,6 +15,11 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error', err));
 
+  const db = mongoose.connection;
+db.on('connected', () => console.log('Mongoose connected'));
+db.on('error', err => console.error('Mongoose connection error:', err));
+db.on('disconnected', () => console.log('Mongoose disconnected'));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
 
