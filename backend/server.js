@@ -20,6 +20,15 @@ db.on('connected', () => console.log('Mongoose connected'));
 db.on('error', err => console.error('Mongoose connection error:', err));
 db.on('disconnected', () => console.log('Mongoose disconnected'));
 
+mongoose.connect(process.env.DB_URL, options)
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch(err => {
+    console.error('MongoDB connection failed:', err);
+    process.exit(1);
+  });
+
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
 
