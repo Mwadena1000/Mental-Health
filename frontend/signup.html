@@ -65,7 +65,7 @@
 
       try {
         // Step 1: Sign up the user
-        const signupRes = await fetch('/api/auth/signup', {
+        const signupRes = await fetch('http://localhost:5000/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password: pwd })
@@ -79,7 +79,7 @@
         }
 
         // Step 2: Automatically log in to get token
-        const loginRes = await fetch('/api/auth/login', {
+        const loginRes = await fetch('http://localhost:5000/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password: pwd })
