@@ -42,9 +42,14 @@
     const params = new URLSearchParams(window.location.search);
     const returnUrl = params.get('returnUrl') || 'Homepage.html';
 
+    // Real-time lowercase conversion for email input
+    document.getElementById('email').addEventListener('input', function() {
+      this.value = this.value.toLowerCase();
+    });
+
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const email = this.email.value.trim();
+      const email = this.email.value.trim().toLowerCase();
       const pwd = this.password.value;
       let ok = true;
       document.getElementById('emailError').textContent = '';
