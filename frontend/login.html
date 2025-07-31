@@ -67,15 +67,16 @@
           body: JSON.stringify({ email, password: pwd })
         });
         const data = await res.json();
+        
         if (data.token) {
           localStorage.setItem('authToken', data.token);
-          // Redirect to returnUrl if it's safe, else default booking page
-          const dest = isSafeUrl(returnUrl) ? returnUrl : 'booking.html';
+          const dest = isSafeUrl(returnUrl) ? returnUrl : 'Homepage.html';
           window.location.href = dest;
         } else {
           alert(data.message || 'Login failed');
         }
       } catch (err) {
+        console.error('Error:', err);
         alert('Login error');
       }
     });

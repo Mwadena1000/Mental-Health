@@ -64,24 +64,37 @@
       if (!ok) return;
 
       try {
-        const res = await fetch('/api/auth/signup', {
+        // Step 1: Sign up the user
+        const signupRes = await fetch('/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password: pwd })
         });
-        const data = await res.json();
-        console.log('Signup response:', data);
+        const signupData = await signupRes.json();
+        console.log('Signup response:', signupData);
 
-        if (data.token) {
-          localStorage.setItem('authToken', data.token);
-          window.location.href = isSafeUrl(rv) ? rv : 'booking.html';
-        } else if (data.success) {
-          // fallback if you return success without token
-          window.location.href = 'login.html?returnUrl=' + encodeURIComponent(rv);
+        if (!signupData.success) {
+          alert(signupData.message || 'Signup failed');
+          return;
+        }
+
+        // Step 2: Automatically log in to get token
+        const loginRes = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pwd })
+        });
+        const loginData = await loginRes.json();
+
+        if (loginData.token) {
+          localStorage.setItem('authToken', loginData.token);
+          window.location.href = isSafeUrl(rv) ? rv : 'Homepage.html';
         } else {
-          alert(data.message || 'Signup failed');
+          alert('Signup successful but login failed. Please log in manually.');
+          window.location.href = 'login.html?returnUrl=' + encodeURIComponent(rv);
         }
       } catch (err) {
+        console.error('Error:', err);
         alert('Signup error');
       }
     });
