@@ -1,3 +1,8 @@
+// Check authentication - redirect to login if not authenticated
+if (!localStorage.getItem('authToken')) {
+  window.location.href = 'login.html?returnUrl=quiz.html';
+}
+
 // Set footer year
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -56,9 +61,10 @@ document.getElementById("saveResults").addEventListener("click", async function(
     return;
   }
 
+  // Double-check authentication (in case token expired)
   if (!isLoggedIn()) {
-    // redirect to login, with return URL to this page
-    window.location.href = `login.html?returnUrl=quiz.html`;
+    localStorage.removeItem('authToken');
+    window.location.href = 'login.html?returnUrl=quiz.html';
     return;
   }
 

@@ -61,6 +61,24 @@ body {
   background: #c82333;
 }
 
+.nav-links a.auth-btn {
+  background: #28a745;
+  color: white;
+  font-weight: 600;
+}
+
+.nav-links a.auth-btn:hover {
+  background: #218838;
+}
+
+.nav-links a.auth-btn.logout {
+  background: #dc3545;
+}
+
+.nav-links a.auth-btn.logout:hover {
+  background: #c82333;
+}
+
 /* Hero section */
 .hero {
   display: flex;

@@ -36,7 +36,16 @@
   <script>
     // Only allow redirects to trusted internal pages
     function isSafeUrl(url) {
-      return url && (url === 'booking.html' || url === 'Homepage.html' || url.startsWith('/'));
+      const safeUrls = [
+        'booking.html', 
+        'Homepage.html', 
+        'quiz.html',
+        'appointments.html',
+        'chat.html',
+        'resources.html',
+        'crisis.html'
+      ];
+      return url && (safeUrls.includes(url) || url.startsWith('/'));
     }
 
     const params = new URLSearchParams(window.location.search);
