@@ -9,6 +9,7 @@ app.use(express.json());
 
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
+const bookingRoutes = require('./routes/booking');
 const PORT = process.env.PORT || 5000;
 
 mongoose.connect(process.env.DB_URL, {
@@ -33,3 +34,4 @@ mongoose.connection.on('disconnected', () => console.log('Mongoose event: discon
 
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
+app.use('/api/booking', bookingRoutes);
