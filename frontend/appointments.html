@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Appointments | MHK Kenya</title>
+  <link rel="stylesheet" href="appointments.css"/>
+</head>
+<body>
+  <header class="navbar">
+    <div id="logo-container" class="logo-container">
+      <div class="logo">MHK</div>
+    </div>
+    <nav class="nav-links">
+      <a href="Homepage.html">Home</a>
+      <a href="quiz.html">Self-Assessment</a>
+      <a href="chat.html">Chat Support</a>
+      <a href="resources.html">Resources</a>
+      <a href="booking.html">Book Appointment</a>
+      <a href="appointments.html" class="active">My Appointments</a>
+      <a href="crisis.html" class="crisis">Crisis Help</a>
+      <a href="#" id="authButton" class="auth-btn">Login</a>
+    </nav>
+  </header>
+
+  <main class="appointments-container">
+    <div class="header-section">
+      <h1>My Appointments</h1>
+      <button id="newBookingBtn" class="btn-primary">Book New Appointment</button>
+    </div>
+
+    <div class="filters-section">
+      <button id="allBtn" class="filter-btn active" data-filter="all">All</button>
+      <button id="upcomingBtn" class="filter-btn" data-filter="upcoming">Upcoming</button>
+      <button id="pastBtn" class="filter-btn" data-filter="past">Past</button>
+      <button id="cancelledBtn" class="filter-btn" data-filter="cancelled">Cancelled</button>
+    </div>
+
+    <div id="loadingSpinner" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading appointments...</p>
+    </div>
+
+    <div id="appointmentsList" class="appointments-list">
+      <!-- Appointments will be dynamically loaded here -->
+    </div>
+
+    <div id="noAppointments" class="no-appointments" style="display: none;">
+      <div class="empty-state">
+        <h3>No appointments found</h3>
+        <p>You haven't booked any appointments yet.</p>
+        <button id="bookFirstBtn" class="btn-primary">Book Your First Appointment</button>
+      </div>
+    </div>
+
+    <div id="errorMessage" class="error-message" style="display: none;">
+      <h3>Error Loading Appointments</h3>
+      <p id="errorText"></p>
+      <button id="retryBtn" class="btn-secondary">Try Again</button>
+    </div>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> MHK Kenya.
+  </footer>
+
+  <script src="appointments.js"></script>
+  <script src="logo.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html> 

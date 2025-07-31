@@ -12,7 +12,8 @@ function isValidEmail(email) {
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = req.body.email.trim().toLowerCase();
+    const password = req.body.password;
 
     // Check inputs
     if (!email || !password) {
@@ -43,7 +44,8 @@ router.post('/signup', async (req, res) => {
 // Login route
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = req.body.email.trim().toLowerCase();
+    const password = req.body.password;
 
     // Validate inputs
     if (!email || !password) {

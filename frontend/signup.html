@@ -18,20 +18,19 @@
 <body>
   <h1>Create an Account</h1>
   <form id="signupForm" autocomplete="on" novalidate>
-    <label for="email">Email address (required)</label>
-    <input type="email" id="email" name="email" autocomplete="email" required />
+    <label>Email address (required)</label>
+    <input type="email" id="email" name="email" required />
     <div id="emailError" class="error" aria-live="polite"></div>
 
-    <label for="password">Password (required): at least 8 characters</label>
-    <input type="password" id="password" name="password" autocomplete="new-password" minlength="8" required />
+    <label>Password (min 8 characters)</label>
+    <input type="password" id="password" name="password" minlength="8" required />
     <div id="passwordError" class="error" aria-live="polite"></div>
 
-    <label for="confirm">Confirm Password</label>
-    <input type="password" id="confirm" name="confirm" autocomplete="new-password" minlength="8" required />
+    <label>Confirm Password</label>
+    <input type="password" id="confirm" name="confirm" minlength="8" required />
     <div id="confirmError" class="error" aria-live="polite"></div>
 
-    <input type="hidden" id="returnUrl" name="returnUrl" value=""/>
-
+    <input type="hidden" id="returnUrl" name="returnUrl" value="" />
     <button type="submit">Sign Up</button>
   </form>
 
@@ -41,16 +40,21 @@
 
   <script>
     function isSafeUrl(url) {
-      return url && (url === 'booking.html' || url.startsWith('/') || url === 'Homepage.html');
+      return url === 'booking.html' || url === 'Homepage.html' || url.startsWith('/');
     }
 
     const params = new URLSearchParams(window.location.search);
     const returnUrl = params.get('returnUrl') || 'Homepage.html';
     document.getElementById('returnUrl').value = returnUrl;
 
+    // Real-time lowercase conversion for email input
+    document.getElementById('email').addEventListener('input', function() {
+      this.value = this.value.toLowerCase();
+    });
+
     document.getElementById('signupForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const email = this.email.value.trim();
+      const email = this.email.value.trim().toLowerCase();
       const pwd = this.password.value;
       const conf = this.confirm.value;
       const rv = this.returnUrl.value;
@@ -59,38 +63,43 @@
       document.getElementById('passwordError').textContent = '';
       document.getElementById('confirmError').textContent = '';
 
-      if (!email) {
-        document.getElementById('emailError').textContent = 'Email is required.';
-        ok = false;
-      }
-      if (pwd.length < 8) {
-        document.getElementById('passwordError').textContent = 'Password must be at least 8 characters.';
-        ok = false;
-      }
-      if (pwd !== conf) {
-        document.getElementById('confirmError').textContent = 'Passwords do not match.';
-        ok = false;
-      }
+      if (!email) { document.getElementById('emailError').textContent = 'Email is required.'; ok = false; }
+      if (pwd.length < 8) { document.getElementById('passwordError').textContent = 'Password must be at least 8 characters.'; ok = false; }
+      if (pwd !== conf) { document.getElementById('confirmError').textContent = 'Passwords do not match.'; ok = false; }
       if (!ok) return;
 
       try {
-        const res = await fetch('/api/signup', {
+        // Step 1: Sign up the user
+        const signupRes = await fetch('http://localhost:5000/api/auth/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password: pwd })
         });
-        const data = await res.json();
-        if (data.token) {
-          localStorage.setItem('authToken', data.token);
-          if (isSafeUrl(rv)) {
-            window.location.href = rv;
-          } else {
-            window.location.href = 'booking.html';
-          }
-        } else {
-          alert(data.message || 'Signup failed');
+        const signupData = await signupRes.json();
+        console.log('Signup response:', signupData);
+
+        if (!signupData.success) {
+          alert(signupData.message || 'Signup failed');
+          return;
         }
-      } catch(err) {
+
+        // Step 2: Automatically log in to get token
+        const loginRes = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pwd })
+        });
+        const loginData = await loginRes.json();
+
+        if (loginData.token) {
+          localStorage.setItem('authToken', loginData.token);
+          window.location.href = isSafeUrl(rv) ? rv : 'Homepage.html';
+        } else {
+          alert('Signup successful but login failed. Please log in manually.');
+          window.location.href = 'login.html?returnUrl=' + encodeURIComponent(rv);
+        }
+      } catch (err) {
+        console.error('Error:', err);
         alert('Signup error');
       }
     });

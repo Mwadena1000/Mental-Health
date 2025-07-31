@@ -36,15 +36,29 @@
   <script>
     // Only allow redirects to trusted internal pages
     function isSafeUrl(url) {
-      return url && (url === 'booking.html' || url === 'Homepage.html' || url.startsWith('/'));
+      const safeUrls = [
+        'booking.html', 
+        'Homepage.html', 
+        'quiz.html',
+        'appointments.html',
+        'chat.html',
+        'resources.html',
+        'crisis.html'
+      ];
+      return url && (safeUrls.includes(url) || url.startsWith('/'));
     }
 
     const params = new URLSearchParams(window.location.search);
     const returnUrl = params.get('returnUrl') || 'Homepage.html';
 
+    // Real-time lowercase conversion for email input
+    document.getElementById('email').addEventListener('input', function() {
+      this.value = this.value.toLowerCase();
+    });
+
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const email = this.email.value.trim();
+      const email = this.email.value.trim().toLowerCase();
       const pwd = this.password.value;
       let ok = true;
       document.getElementById('emailError').textContent = '';
@@ -61,21 +75,22 @@
       if (!ok) return;
 
       try {
-        const res = await fetch('/api/login', {
+        const res = await fetch('http://localhost:5000/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password: pwd })
         });
         const data = await res.json();
+        
         if (data.token) {
           localStorage.setItem('authToken', data.token);
-          // Redirect to returnUrl if it's safe, else default booking page
-          const dest = isSafeUrl(returnUrl) ? returnUrl : 'booking.html';
+          const dest = isSafeUrl(returnUrl) ? returnUrl : 'Homepage.html';
           window.location.href = dest;
         } else {
           alert(data.message || 'Login failed');
         }
       } catch (err) {
+        console.error('Error:', err);
         alert('Login error');
       }
     });

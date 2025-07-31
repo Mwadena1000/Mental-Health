@@ -55,21 +55,79 @@ messageInput.addEventListener("input", () => {
   timeInput.dispatchEvent(new Event("input"));
 });
 
+// Real-time lowercase conversion for email input
+document.getElementById("email").addEventListener("input", function() {
+  this.value = this.value.toLowerCase();
+});
+
 // Submit handler
-document.getElementById("bookingForm").addEventListener("submit", function(e) {
+document.getElementById("bookingForm").addEventListener("submit", async function(e) {
   e.preventDefault();
   if (!this.checkValidity()) {
     this.reportValidity();
     return;
   }
+
   const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value.trim().toLowerCase();
   const date = dateInput.value;
   const time = timeInput.value;
+  const message = messageInput.value.trim();
 
-  document.getElementById("confirmation").textContent =
-    `Thank you, ${name}! Your appointment on ${date} at ${time} has been received. We'll contact you at ${email}.`;
+  // Get auth token
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    alert('Please log in to book an appointment.');
+    window.location.href = 'login.html?returnUrl=booking.html';
+    return;
+  }
 
-  this.reset();
-  dateInput.min = formatDateISO(new Date());
+  try {
+    const response = await fetch('http://localhost:5000/api/booking/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        date,
+        time,
+        message
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      document.getElementById("confirmation").innerHTML = `
+        <div style="color: green; padding: 1rem; background: #e8f5e8; border-radius: 8px; margin-top: 1rem;">
+          <h3>✅ Booking Confirmed!</h3>
+          <p>Thank you, ${name}! Your appointment on ${date} at ${time} has been booked successfully.</p>
+          <p>We'll contact you at ${email} to confirm details.</p>
+          ${data.booking.isCrisis ? '<p><strong>⚠️ Crisis booking detected - we will prioritize your appointment.</strong></p>' : ''}
+        </div>
+      `;
+      
+      this.reset();
+      dateInput.min = formatDateISO(new Date());
+      dateInput.value = formatDateISO(new Date());
+    } else {
+      document.getElementById("confirmation").innerHTML = `
+        <div style="color: red; padding: 1rem; background: #ffe8e8; border-radius: 8px; margin-top: 1rem;">
+          <h3>❌ Booking Failed</h3>
+          <p>${data.message || 'Failed to create booking. Please try again.'}</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('Booking error:', error);
+    document.getElementById("confirmation").innerHTML = `
+      <div style="color: red; padding: 1rem; background: #ffe8e8; border-radius: 8px; margin-top: 1rem;">
+        <h3>❌ Connection Error</h3>
+        <p>Failed to connect to server. Please check your connection and try again.</p>
+      </div>
+    `;
+  }
 });
